@@ -1,3 +1,6 @@
 if game:GetService("Workspace"):FindFirstChild("The Controller") then
-a
-a
+wait(1)
+game.Players.LocalPlayer:Kick("Teleport Rejoin...")
+TeleportService:Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
+wait()
+TeleportService:Teleport(game.PlaceId, game.Players.LocalPlayer)
