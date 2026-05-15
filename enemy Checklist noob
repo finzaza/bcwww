@@ -2,6 +2,7 @@ repeat task.wait() until game:IsLoaded()
 
 if game.PlaceId == 8811271345 then
     task.wait(1)
+    print("Loaded!")
 repeat wait() until game:GetService("Workspace"):FindFirstChild("The Controller")
 if game:GetService("Workspace"):FindFirstChild("The Controller") then
 wait(1)
