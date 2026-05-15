@@ -58,7 +58,7 @@ if game.PlaceId == 8811271345 then
 
                 local shouldTeleport = {
                     ["Moon"]=true, ["Blizzard"]=true, ["Nature"]=true, 
-                    ["Storm"]=true, ["Flame"]=true, ["Star"]=true, ["Radiation"]=true
+                    ["Storm"]=true, ["Flame"]=true, ["Star"]=false, ["Radiation"]=true
                 }
 
                 if shouldTeleport[name] then
