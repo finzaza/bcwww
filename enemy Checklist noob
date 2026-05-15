@@ -1,4 +1,5 @@
 repeat task.wait() until game:IsLoaded()
+local TeleportService = game:GetService("TeleportService")
 
 if game.PlaceId == 8811271345 then
     task.wait(1)
