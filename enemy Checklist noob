@@ -1,6 +1,12 @@
+repeat task.wait() until game:IsLoaded()
+
+if game.PlaceId == 8811271345 then
+    task.wait(1)
+repeat wait() until game:GetService("Workspace"):FindFirstChild("The Controller")
 if game:GetService("Workspace"):FindFirstChild("The Controller") then
 wait(1)
 game.Players.LocalPlayer:Kick("Teleport Rejoin...")
 TeleportService:Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
 wait()
 TeleportService:Teleport(game.PlaceId, game.Players.LocalPlayer)
+end
