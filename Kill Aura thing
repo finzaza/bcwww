@@ -53,8 +53,8 @@ if game.PlaceId == 8811271345 then
         end
     end
 
-    -- Start 15 concurrent attack threads for maximum speed
-    for i = 1, 15 do
+    -- Start 10 concurrent attack threads for maximum speed
+    for i = 1, 10 do
         coroutine.wrap(attackLoop)()
     end
 end
