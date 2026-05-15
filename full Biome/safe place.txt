@@ -1,0 +1,24 @@
+repeat task.wait() until game:IsLoaded()
+
+if game.PlaceId == 8811271345 then
+    task.wait(1)
+game.Players.LocalPlayer.Character:MoveTo(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
+wait(1)
+NewPart = Instance.new("Part")
+NewPart.Parent = Workspace
+NewPart.Size = Vector3.new(1000, 1000.1000, 1000)
+NewPart.BrickColor = BrickColor.new("Blue")
+NewPart.Anchored = true
+NewPart.CFrame = game:GetService("Workspace").Bmee24z["Right Leg"].CFrame
+wait(0.5)
+local Clone = game:GetService("Workspace").Bmee24z.HumanoidRootPart:Clone()
+Clone.Parent = game:GetService("Workspace").Bmee24z
+game.Players.LocalPlayer.Character:MoveTo(Vector3.new(-133.635712, 892.999146, 26.5008354, 0.140399262, 1.8248727e-09, -0.99009496, -1.26376065e-08, 1, 5.1067834e-11, 0.99009496, 1.25052608e-08, 0.140399262))
+wait(0.1)
+NewPart = Instance.new("Part")
+NewPart.Parent = Workspace
+NewPart.Size = Vector3.new(15, 15, 15)
+NewPart.BrickColor = BrickColor.new("Blue")
+NewPart.Anchored = true
+NewPart.CFrame = game:GetService("Workspace").Bmee24z["Right Leg"].CFrame
+end
