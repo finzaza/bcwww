@@ -3,6 +3,11 @@ local TeleportService = game:GetService("TeleportService")
 
 if game.PlaceId == 8811271345 then
     task.wait(1)
+    -- Anti AFK
+    for i, v in next, getconnections(game:GetService("Players").LocalPlayer.Idled) do
+        v:Disable();
+    end
+    print("Anti AFK enabled")
     print("Loaded!")
 repeat wait() until game:GetService("Workspace"):FindFirstChild("The Controller")
 if game:GetService("Workspace"):FindFirstChild("The Controller") then
