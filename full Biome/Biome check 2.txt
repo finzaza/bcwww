@@ -1,7 +1,7 @@
 repeat task.wait() until game:IsLoaded()
 
 if game.PlaceId == 8811271345 then
-    task.wait(1)
+    task.wait(5)
     local url = "https://discord.com/api/webhooks/1004766522184573019/ByXUGAAI9PfOsRzLkNIt4Uc6VeKF7Mrbq_tmvkjNBGlbrpwDiymrnHpnyd5E12WG1vL4"
     local TCS = game:GetService("TextChatService")
     local HttpService = game:GetService("HttpService")
