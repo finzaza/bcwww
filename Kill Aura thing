@@ -1,0 +1,62 @@
+repeat task.wait() until game:IsLoaded()
+
+if game.PlaceId == 8811271345 then
+    task.wait(2.5)
+    
+    local Player = game.Players.LocalPlayer
+    getgenv().ALL = true -- Kill switch
+
+    local function attackLoop()
+        while getgenv().ALL do
+            task.wait(0.01) -- High speed but safe
+            
+            local Character = Player.Character
+            if not Character then continue end
+
+            -- 1. Auto-Equip Logic (Handles Torrent or Equinox Slicer)
+            local tool = Character:FindFirstChild("Torrent") or Character:FindFirstChild("Equinox Slicer")
+            if not tool then
+                local backpackTool = Player.Backpack:FindFirstChild("Torrent") or Player.Backpack:FindFirstChild("Equinox Slicer")
+                if backpackTool then
+                    backpackTool.Parent = Character
+                    tool = backpackTool
+                end
+            end
+
+            -- 2. Attack Logic
+            if tool and tool:FindFirstChild("RemoteFunction") then
+                local Remote = tool.RemoteFunction
+                
+                for _, value in ipairs(workspace:GetDescendants()) do
+                    if not getgenv().ALL then break end
+                    
+                    local humanoid = value:FindFirstChildOfClass("Humanoid")
+                    local rootPart = value:FindFirstChild("HumanoidRootPart")
+                    
+                    -- Only target living enemies that aren't us
+                    if humanoid and rootPart and value ~= Character and humanoid.Health > 0 then
+                        local args = {
+                            "shoot",
+                            {
+                                CFrame.new(rootPart.Position),
+                                100
+                            }
+                        }
+                        
+                        -- Using pcall to prevent the script from crashing if you die
+                        pcall(function()
+                            Remote:InvokeServer(unpack(args))
+                        end)
+                    end
+                end
+            end
+        end
+    end
+
+    -- Start 5 concurrent attack threads for maximum speed
+    for i = 1, 5 do
+        coroutine.wrap(attackLoop)()
+    end
+end
+
+print("--- MULTI-THREAD ATTACK LOADED ---")
