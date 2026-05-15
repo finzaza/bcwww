@@ -1,0 +1,75 @@
+repeat wait() until game:IsLoaded()
+if game.PlaceId == 8811271345 then
+wait(1)
+local url = "https://discord.com/api/webhooks/1004766522184573019/ByXUGAAI9PfOsRzLkNIt4Uc6VeKF7Mrbq_tmvkjNBGlbrpwDiymrnHpnyd5E12WG1vL4"
+local TCS = game:GetService("TextChatService")
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+local request = http_request or request or HttpPost or syn.request
+
+local function sendWebhook(biomeName)
+    local data = {
+        ["username"] = "Biome notify",
+        ["avatar_url"] = "https://cdn.discordapp.com/attachments/1129677331515060384/1129679253798129704/285701869_3698622860261360_2635765401078588719_n.png",
+        ["embeds"] = {{
+            ["title"] = "**" .. biomeName .. " detected!**",
+            ["description"] = "A special biome has appeared in your server.",
+            ["type"] = "rich",
+            ["color"] = 0xff0000,
+            ["fields"] = {
+                {["name"] = "Biome Type", ["value"] = biomeName, ["inline"] = true},
+                {["name"] = "Server ID", ["value"] = game.JobId, ["inline"] = true}
+            },
+            ["image"] = {["url"] = "https://media1.tenor.com/m/W6pps-R_M6kAAAAC/patrick-patrick-star.gif"}
+        }}
+    }
+    pcall(function()
+        request({Url = url, Body = HttpService:JSONEncode(data), Method = "POST", Headers = {["content-type"] = "application/json"}})
+    end)
+end
+
+TCS.MessageReceived:Connect(function(msg)
+    local t = string.gsub(msg.Text, "<[^>]*>", "")
+    
+    local triggers = {
+        ["The moon is rising!"] = "Moon",
+        ["An incredibly strong blizzard is freezing the island!"] = "Blizzard",
+        ["The wind is sweeping life energy..."] = "Nature",
+        ["A powerful stormsurge has engulfed the island!"] = "Storm",
+        ["Magical flames have warped this island!"] = "Flame",
+        ["A bright blue moon illuminates the night along with countless shooting stars..."] = "Star",
+        ["The island has been irradiated by an unknown wave of energy..."] = "Radiation",
+        ["The war between pure and corrupt has started!"] = "PvC",
+        ["The war between holy and unholy has started!"] = "HvC",
+        ["The angels of the sky are descending!"] = "Heavens",
+        ["The void has infiltrated reality!"] = "Void",
+        ["Your actions have created imbalances to reality."] = "Cultist",
+        ["A bright light is blinding the world!"] = "Blinding",
+        ["The world is being shrouded in darkness!"] = "Darkest",
+        ["[Coco]: Noob"] = "Coco",
+        ["A boss has appeared!"] = "Boss"
+    }
+
+    for phrase, name in pairs(triggers) do
+        if string.find(t, phrase, 1, true) then
+            print("Triggered: " .. name)
+            sendWebhook(name)
+
+            -- Handle teleporting only for specific biomes
+            local shouldTeleport = {
+                ["Moon"]=true, ["Blizzard"]=true, ["Nature"]=true, 
+                ["Storm"]=true, ["Flame"]=true, ["Star"]=true, ["Radiation"]=true
+            }
+
+            if shouldTeleport[name] then
+                task.wait(1) -- Wait for webhook to send
+                TeleportService:Teleport(game.PlaceId, game.Players.LocalPlayer)
+            end
+            
+            -- Removed 'break' as requested
+        end
+    end
+end
+end)
+
+print("--- ALL BIOMES LOADED ---")
