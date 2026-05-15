@@ -1,7 +1,7 @@
 repeat task.wait() until game:IsLoaded()
 
 if game.PlaceId == 8811271345 then
-    task.wait(1)
+    task.wait(5)
 game.Players.LocalPlayer.Character:MoveTo(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
 wait(1)
 NewPart = Instance.new("Part")
@@ -21,4 +21,13 @@ NewPart.Size = Vector3.new(15, 15, 15)
 NewPart.BrickColor = BrickColor.new("Blue")
 NewPart.Anchored = true
 NewPart.CFrame = game:GetService("Workspace").Bmee24z["Right Leg"].CFrame
+
+--//equip tools
+if game.Players.LocalPlayer.Backpack:FindFirstChild("Torrent") then
+for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+if v.name == "Torrent" then
+v.Parent = game.Players.LocalPlayer.Character
+end
+end
+end
 end
