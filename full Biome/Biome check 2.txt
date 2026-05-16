@@ -64,6 +64,7 @@ if game.PlaceId == 8811271345 then
                 if shouldTeleport[name] then
                     task.wait(1)
                     game.Players.LocalPlayer:Kick("Teleport Rejoin...")
+                    wait(1)
                     TeleportService:Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
                     wait()
                     TeleportService:Teleport(game.PlaceId, game.Players.LocalPlayer)
