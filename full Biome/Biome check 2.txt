@@ -44,7 +44,7 @@ if game.PlaceId == 8811271345 then
             ["The war between holy and unholy has started!"] = "HvC",
             ["The angels of the sky are descending!"] = "Heavens",
             ["The void is infiltrating reality!"] = "Void", --The void has infiltrated reality!
-            ["Your actions have created imbalances to reality."] = "Cultist",
+            ["Your actions have brought imbalances to reality."] = "Cultist", --Your actions have created imbalances to reality.
             ["A bright light is blinding the world!"] = "Blinding",
             ["The world is being shrouded in darkness!"] = "Darkest",
             ["[Coco]: Noob"] = "Coco",
