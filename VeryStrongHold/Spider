@@ -1,0 +1,103 @@
+repeat task.wait() until game:IsLoaded()
+
+if game.PlaceId == 96516249626799 then
+    task.wait(5)
+
+    local Player = game.Players.LocalPlayer
+    local Character = Player.Character or Player.CharacterAdded:Wait()
+    local Backpack = Player:WaitForChild("Backpack")
+
+    --// 1. Initial Weapon Check & Sky Spawn Setup
+    if Backpack:FindFirstChild("Equinox Slicer") then
+        if Character prestige and Character:FindFirstChild("HumanoidRootPart") then
+            Character:MoveTo(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
+        end
+        task.wait(0.1)
+
+        -- Dynamically tracks your character instead of hardcoding 'Bmee24z'
+        local rightLeg = Character:WaitForChild("Right Leg", 5)
+        local rootPart = Character:WaitForChild("HumanoidRootPart", 5)
+
+        if rightLeg and rootPart then
+            -- Create Base Safety Grid Platform
+            local NewPart = Instance.new("Part")
+            NewPart.Parent = workspace
+            NewPart.Size = Vector3.new(1000, 1000.1, 1000)
+            NewPart.BrickColor = BrickColor.new("Blue")
+            NewPart.Anchored = true
+            NewPart.CFrame = rightLeg.CFrame
+            task.wait(0.5)
+
+            -- Bypass/Anticheat Mitigation via Root Component Cloning
+            local Clone = rootPart:Clone()
+            Clone.Parent = Character
+            task.wait(2)
+        end
+
+        -- Teleport down into active combat arena coordinates
+        if Character and Character:FindFirstChild("HumanoidRootPart") then
+            Character:MoveTo(Vector3.new(129.942154, -2.86779857, -81.6024017))
+        end
+
+        -- Wait until any major threat configuration initializes
+        repeat task.wait(0.5) until workspace:FindFirstChild("Tsubolasta") 
+            or workspace:FindFirstChild("The Supreme Uber Bringer of Light") 
+            or workspace:FindFirstChild("Gilgamesh, the Consumer of Reality")
+
+        -- Auto-Equip your main weapon
+        local slicer = Backpack:FindFirstChild("Equinox Slicer")
+        if slicer then
+            slicer.Parent = Character
+        end
+    end
+
+    --// 2. Monitoring & Waiting for Boss Defeat
+    repeat task.wait(0.5) until workspace:FindFirstChild("Gilgamesh, the Consumer of Reality") == nil
+    repeat task.wait(0.5) until workspace:FindFirstChild("Tsubolasta") == nil
+    repeat task.wait(0.5) until workspace:FindFirstChild("The Supreme Uber Bringer of Light") == nil
+
+    -- Auto-Equip Destination Key Item
+    repeat
+        task.wait(0.5)
+        local artifact = Backpack:FindFirstChild("Mysterious Artifact")
+        if artifact then
+            artifact.Parent = Character
+        end
+    until Character:FindFirstChild("Mysterious Artifact")
+
+    --// 3. Matchmaking / Teleport Remote Pipeline Execution
+    task.wait(1.5)
+    local activeArtifact = Character:WaitForChild("Mysterious Artifact", 5)
+    if activeArtifact then
+        local weaponRemote = activeArtifact:WaitForChild("WeaponRemote", 5)
+        if weaponRemote then
+            local useArgs = { "use", {} }
+            pcall(function()
+                weaponRemote:FireServer(unpack(useArgs))
+            end)
+        end
+    end
+
+    task.wait(0.5)
+    local partySystemArgs = {
+        "createParty",
+        {
+            settings = {
+                FriendsOnly = true,
+                Visual = true
+            },
+            subplace = "Stronghold"
+        }
+    }
+    pcall(function()
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(partySystemArgs))
+    end)
+
+    task.wait(0.5)
+    local joinArgs = { "joinSubplace", {} }
+    pcall(function()
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(joinArgs))
+    end)
+
+    print("--SPIDER DEAD--")
+end
