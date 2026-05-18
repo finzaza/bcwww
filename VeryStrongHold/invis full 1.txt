@@ -1,0 +1,164 @@
+repeat task.wait() until game:IsLoaded()
+
+if game.PlaceId == 96516249626799 then
+    task.wait(5)
+    
+    local Player = game.Players.LocalPlayer
+    local Character = Player.Character or Player.CharacterAdded:Wait()
+    local Backpack = Player:WaitForChild("Backpack")
+    
+    --// 1. Safe Weapon Auto-Equip Block
+    local weaponName = "Equinox Slicer"
+    local tool = Character:FindFirstChild(weaponName) or Backpack:FindFirstChild(weaponName)
+    
+    if tool then
+        tool.Parent = Character
+    else
+        warn("Weapon not found in Character or Backpack!")
+    end
+
+    --// 2. Skip Cutscenes / Commands
+    local skipArgs = { "skipall" }
+    pcall(function()
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Commands"):FireServer(unpack(skipArgs))
+    end)
+
+    --// Helper function to handle teleportation and spawning safety platforms safely
+    local function teleportAndFloat(positionVector)
+        if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+            Player.Character:MoveTo(positionVector)
+            task.wait(0.1)
+            
+            local Float = Instance.new("Part")
+            Float.Parent = workspace
+            Float.Size = Vector3.new(5, 1, 5)
+            Float.Anchored = true
+            Float.BrickColor = BrickColor.new("Blue") -- Colored so you can visually verify it spawns
+            Float.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(0, -3, 0)
+        end
+    end
+
+    --// 3. Start Sequence Teleport
+    teleportAndFloat(Vector3.new(-298.733154, 233.052551, -560.482117))
+
+    --// 4. Wait for The Controller Boss Phase
+    repeat task.wait(0.5) until workspace:FindFirstChild("The Controller")
+    
+    if workspace:FindFirstChild("The Controller") then
+        if Player.Character then
+            Player.Character:MoveTo(Vector3.new(111.202896, 176.344406, 206.657394))
+        end
+        task.wait(1)
+        
+        -- Trigger Key Input
+        game:GetService('VirtualInputManager'):SendKeyEvent(true, Enum.KeyCode.Z, false, game)
+        task.wait(1.5)
+        
+        -- Return to sky safety coordinates
+        teleportAndFloat(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
+        task.wait(1.5)
+        
+        -- Attack Loop until Equinox Guardian spawns
+        repeat
+            task.wait(0.1)
+            local currentWeapon = Character:FindFirstChild(weaponName)
+            if currentWeapon and currentWeapon:FindFirstChild("RemoteFunction") then
+                local attackArgs = {
+                    [1] = "fracturedworlds",
+                    [2] = {
+                        [1] = Vector3.new(111.202896, 176.344406, 206.657394),
+                        [2] = Vector3.new(111.202896, 176.344406, 206.657394),
+                        [3] = 9000
+                    }
+                }
+                pcall(function()
+                    currentWeapon.RemoteFunction:InvokeServer(unpack(attackArgs))
+                end)
+            end
+        until workspace:FindFirstChild("Equinox Guardian")
+    end
+
+    --// 5. Zone 2: Equinox Guardian Phase
+    repeat task.wait(0.5) until workspace:FindFirstChild("Equinox Guardian")
+    
+    if workspace:FindFirstChild("Equinox Guardian") then
+        teleportAndFloat(Vector3.new(84.2108383, 185.826874, 863.561096))
+        task.wait(2.5)
+        
+        if Player.Character then
+            Player.Character:MoveTo(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
+        end
+        
+        -- Wait for mid-tier bosses to arrive
+        repeat task.wait(0.5) until workspace:FindFirstChild("Equinox Praetor") or workspace:FindFirstChild("Aaliyah, the Cavalier")
+        
+        if Player.Character then
+            Player.Character:MoveTo(Vector3.new(84.2108383, 185.826874, 863.561096))
+        end
+        task.wait(1.5)
+        
+        local currentWeapon = Character:FindFirstChild(weaponName)
+        if currentWeapon and currentWeapon:FindFirstChild("RemoteFunction") then
+            local midBossArgs = {
+                [1] = "fracturedworlds",
+                [2] = {
+                    [1] = Vector3.new(84.2108383, 185.826874, 863.561096),
+                    [2] = Vector3.new(84.2108383, 185.826874, 863.561096),
+                    [3] = 9000
+                }
+            }
+            pcall(function()
+                currentWeapon.RemoteFunction:InvokeServer(unpack(midBossArgs))
+            end)
+        end
+        
+        -- Wait until both sub-bosses are dead
+        repeat task.wait(0.5) until workspace:FindFirstChild("Aaliyah, the Cavalier") == nil
+        repeat task.wait(0.5) until workspace:FindFirstChild("Equinox Praetor") == nil
+        task.wait(0.8)
+        
+        if Player.Character then
+            Player.Character:MoveTo(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
+        end
+    end
+
+    --// 6. Final Phase: Archbishop Setup
+    repeat task.wait(0.5) until workspace:FindFirstChild("The Controller")
+    
+    local currentWeapon = Character:FindFirstChild(weaponName)
+    if currentWeapon and currentWeapon:FindFirstChild("RemoteFunction") then
+        local archArgs = {
+            [1] = "fracturedworlds",
+            [2] = {
+                [1] = Vector3.new(599.000305, 225.74913, 1558.74976),
+                [2] = Vector3.new(599.000305, 225.74913, 1558.74976),
+                [3] = 9000
+            }
+        }
+        pcall(function()
+            currentWeapon.RemoteFunction:InvokeServer(unpack(archArgs))
+        end)
+    end
+    task.wait(3.5)
+
+    -- Cast ultimate/loop attack until Archbishop appears
+    repeat
+        task.wait(0.1)
+        local currentWeapon = Character:FindFirstChild(weaponName)
+        if currentWeapon and currentWeapon:FindFirstChild("RemoteFunction") then
+            local loopArgs = {
+                [1] = "fracturedworlds",
+                [2] = {
+                    [1] = Vector3.new(599.000305, 225.74913, 1558.74976),
+                    [2] = Vector3.new(599.000305, 225.74913, 1558.74976),
+                    [3] = 9000
+                }
+            }
+            pcall(function()
+                currentWeapon.RemoteFunction:InvokeServer(unpack(loopArgs))
+            end)
+        end
+    until workspace:FindFirstChild("Alrasid, Archbishop of the Equinox")
+    
+    print("--- AUTOMATION FLOW COMPLETED ---")
+end
