@@ -1,1 +1,88 @@
-abc
+repeat task.wait() until game:IsLoaded()
+
+if game.PlaceId == 112802237735950 then
+    task.wait(2.5)
+    
+    local Player = game.Players.LocalPlayer
+    
+    --// Wait for startup requirements
+    repeat task.wait(0.5) until Player.Character and Player.Character:FindFirstChild("Equinox Slicer") or Player.Backpack:FindFirstChild("Equinox Slicer")
+    print("Loaded!")
+    
+    repeat task.wait(0.5) until game:GetService("Workspace"):FindFirstChild("NagaTorment")
+    print("Started Kill Aura Thing [Spare Mode Enabled]")
+    
+    getgenv().ALL = true -- Kill switch
+
+    local function attackLoop()
+        while getgenv().ALL do
+            task.wait(0.01) -- Keep threads optimized
+            
+            local Character = Player.Character
+            if not Character then continue end
+
+            --// SPARE MODE DETECTION
+            local boss = game:GetService("Workspace"):FindFirstChild("Okeania, the Ocean's Authority")
+            if boss and boss:FindFirstChild("Humanoid") then
+                -- Check if Boss health is dropping to minimum required to spare
+                if boss.Humanoid.Health <= 1 then
+                    local currentSlicer = Character:FindFirstChild("Equinox Slicer")
+                    if currentSlicer then
+                        currentSlicer:Destroy() -- Trash it to guarantee zero accidental hits
+                    end
+                    task.wait(1)
+                    continue -- Bypass attack calculations entirely
+                end
+            end
+
+            -- 1. Auto-Equip Logic (Only runs if weapon hasn't been destroyed by Spare Mode)
+            local tool = Character:FindFirstChild("Torrent") or Character:FindFirstChild("Equinox Slicer")
+            if not tool then
+                local backpackTool = Player.Backpack:FindFirstChild("Equinox Slicer")
+                if backpackTool then
+                    backpackTool.Parent = Character
+                    tool = backpackTool
+                end
+            end
+
+            -- 2. Attack Execution Loop
+            if tool and tool:FindFirstChild("RemoteFunction") then
+                local Remote = tool.RemoteFunction
+                
+                for _, value in ipairs(workspace:GetDescendants()) do
+                    if not getgenv().ALL then break end
+                    
+                    local humanoid = value:FindFirstChildOfClass("Humanoid")
+                    local rootPart = value:FindFirstChild("HumanoidRootPart")
+                    
+                    -- Filter out yourself, dead entities, and ensure boss isn't being spared
+                    if humanoid and rootPart and value ~= Character and humanoid.Health > 0 then
+                        -- Double-check health status mid-target evaluation
+                        if value.Name == "Okeania, the Ocean's Authority" and humanoid.Health <= 1 then 
+                            break 
+                        end
+
+                        local args = {
+                            "hit",
+                            {
+                                rootPart.Position,
+                                5.949999809265137,
+                                2,
+                                -1
+                            }
+                        }
+                        
+                        pcall(function()
+                            Remote:InvokeServer(unpack(args))
+                        end)
+                    end
+                end
+            end
+        end
+    end
+
+    -- Run multi-threaded loops
+    for i = 1, 15 do
+        coroutine.wrap(attackLoop)()
+    end
+end
