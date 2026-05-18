@@ -62,7 +62,7 @@ if game.PlaceId == 112802237735950 then
     until character:FindFirstChild("Azure Orb")
 
     --// Remote for teleporting out
-    task.wait(1)
+    task.wait()
     local useArgs = { "use", {} }
     character:WaitForChild("Azure Orb"):WaitForChild("WeaponRemote"):FireServer(unpack(useArgs))
     
