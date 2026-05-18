@@ -63,7 +63,7 @@ if game.PlaceId == 112802237735950 then
     local useArgs = { "use", {} }
     character:WaitForChild("Azure Orb"):WaitForChild("WeaponRemote"):FireServer(unpack(useArgs))
     
-    task.wait(0.5)
+    task.wait()
     local partyArgs = {
         "createParty",
         {
@@ -77,7 +77,7 @@ if game.PlaceId == 112802237735950 then
     }
     game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(partyArgs))
     
-    task.wait(0.5)
+    task.wait()
     local joinArgs = { "joinSubplace", {} }
     game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(joinArgs))
 end
