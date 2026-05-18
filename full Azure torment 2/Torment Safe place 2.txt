@@ -29,6 +29,7 @@ if game.PlaceId == 112802237735950 then
     until game:GetService("Workspace"):FindFirstChild("NagaTorment")
 
     task.wait()
+    player.Character:FindFirstChild("HumanoidRootPart").Anchored = false
     --//Just a place
     local rightLeg = character:WaitForChild("Right Leg")
     if rightLeg then
