@@ -1,0 +1,63 @@
+repeat task.wait() until game:IsLoaded()
+
+if game.PlaceId == 8811271345 then
+    task.wait(5)
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local backpack = player:WaitForChild("Backpack")
+    local itemName = "Mysterious Artifact"
+
+    --// 1. Initial Teleport
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        character:MoveTo(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
+    end
+    
+    --// 2. Initial Equip Attempt
+    local weapon = backpack:FindFirstChild(itemName)
+    if weapon then
+        weapon.Parent = character
+    end
+
+    --// 3. Reliable Auto-Equip Loop
+    repeat
+        task.wait(0.1)
+        local item = backpack:FindFirstChild(itemName)
+        if item then
+            item.Parent = character
+        end
+    until character:FindFirstChild(itemName)
+
+    --// 4. Remote Pipeline (Using Mysterious Artifact & Stronghold Configuration)
+    task.wait(0.5)
+    local activeItem = character:WaitForChild(itemName, 5)
+    if activeItem and activeItem:FindFirstChild("WeaponRemote") then
+        local useArgs = { "use", {} }
+        pcall(function()
+            activeItem.WeaponRemote:FireServer(unpack(useArgs))
+        end)
+    end
+    
+    task.wait(0.5)
+    local partyArgs = {
+        "createParty",
+        {
+            settings = {
+                FriendsOnly = true,
+                Visual = true
+            },
+            subplace = "Stronghold"
+        }
+    }
+    pcall(function()
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(partyArgs))
+    end)
+    
+    task.wait(0.5)
+    local joinArgs = { "joinSubplace", {} }
+    pcall(function()
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(joinArgs))
+    end)
+
+    print("--RELOAD!---")
+end
