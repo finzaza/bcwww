@@ -9,19 +9,17 @@ local SETTINGS = {
     Range = 150,
 }
 
--- Add your egg names here. Set to true to collect, false to ignore.
+-- Type your egg names here in ALL LOWERCASE letters.
 local ALLOWED_EGGS = {
-    ["EggBadlands"] = false,
-    ["noobegg"]  = false,
-    ["CommonEgg"]   = true,
-    -- You can add as many as you want following this format
+    ["eggbadlands"] = true,
+    ["eggvolcano"]  = false,
+    ["commonegg"]   = true,
 }
 
 local function bringPart(part)
     part.Anchored = false
     part.CanCollide = false
     
-    -- Continuously forces the egg to your position 60 times a second to fight server lag
     local connection
     connection = RunService.RenderStepped:Connect(function()
         if part and part.Parent and character and hrp then
@@ -32,7 +30,6 @@ local function bringPart(part)
         end
     end)
     
-    -- Stop tracking after 2 seconds (giving it enough time to register the touch)
     task.delay(2, function()
         if connection then connection:Disconnect() end
     end)
@@ -40,14 +37,16 @@ end
 
 local function scanForEggs()
     for _, item in ipairs(workspace:GetDescendants()) do
-        -- 1. Check if it's a MeshPart with a TouchInterest
         if item:IsA("MeshPart") and item:FindFirstChild("TouchInterest") then
             
-            -- 2. Check if this specific egg name is enabled in our config
-            if ALLOWED_EGGS[item.Name] == true then
+            -- Get the lowercase names of the part AND its parent model
+            local partNameLower = string.lower(item.Name)
+            local parentNameLower = item.Parent and string.lower(item.Parent.Name) or ""
+            
+            -- Check if either name matches our allowed list
+            if ALLOWED_EGGS[partNameLower] == true or ALLOWED_EGGS[parentNameLower] == true then
                 local distance = (item.Position - hrp.Position).Magnitude
                 
-                -- 3. Check if it's within range
                 if distance <= SETTINGS.Range then
                     print("Bringing targeted egg: " .. item.Name)
                     bringPart(item)
@@ -58,7 +57,6 @@ local function scanForEggs()
     end
 end
 
--- Scan every 1 second
 while true do
     scanForEggs()
     task.wait(1)
