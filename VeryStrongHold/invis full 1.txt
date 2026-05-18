@@ -23,14 +23,14 @@ if game.PlaceId == 96516249626799 then
     end)
 
     --// Helper function for safe teleport and platform creation
-    local function teleportAndFloat(positionVector)
+    local function teleportAndFloat(positionVector, customSize)
         if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
             Player.Character:MoveTo(positionVector)
             task.wait(0.1)
             
             local Float = Instance.new("Part")
             Float.Parent = workspace
-            Float.Size = Vector3.new(5, 1, 5)
+            Float.Size = customSize or Vector3.new(5, 1, 5)
             Float.Anchored = true
             Float.BrickColor = BrickColor.new("Blue")
             Float.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(0, -3, 0)
@@ -181,5 +181,12 @@ if game.PlaceId == 96516249626799 then
         end
     until workspace:FindFirstChild("Alrasid, Archbishop of the Equinox")
     
-    print("---AUTO LOADED!---")
+    --// 7. Archbishop Spawn Handling Block
+    repeat task.wait(0.5) until workspace:FindFirstChild("Alrasid, Archbishop of the Equinox")
+    
+    if workspace:FindFirstChild("Alrasid, Archbishop of the Equinox") then
+        -- Teleports and spawns the custom 10x10x10 floating platform automatically
+        teleportAndFloat(Vector3.new(-950000.23584, 950000.05774, -1651.85693), Vector3.new(10, 10, 10))
+        print("---STAGE CLEAR---")
+    end
 end
