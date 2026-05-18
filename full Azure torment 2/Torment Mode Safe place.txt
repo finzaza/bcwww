@@ -1,0 +1,81 @@
+repeat wait() until game:IsLoaded()
+if game.PlaceId == 112802237735950 then
+wait(5)
+
+--//Equip Weapons
+repeat wait() until game.Players.LocalPlayer.Backpack:FindFirstChild("Equinox Slicer")
+if game.Players.LocalPlayer.Backpack:FindFirstChild("Equinox Slicer") then
+for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+if v.name == "Equinox Slicer" then
+v.Parent = game.Players.LocalPlayer.Character
+end
+end
+end
+
+--//Started Torment mode
+wait(1)
+local args = {
+	"skipall"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Commands"):FireServer(unpack(args))
+
+--//Tped
+repeat
+wait(1)
+game.Players.LocalPlayer.Character:MoveTo(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
+until game:GetService("Workspace"):FindFirstChild("NagaTorment")
+wait()
+NewPart = Instance.new("Part")
+NewPart.Parent = Workspace
+NewPart.Size = Vector3.new(1000, 1000.1000, 1000)
+NewPart.BrickColor = BrickColor.new("Blue")
+NewPart.Anchored = true
+NewPart.CFrame = game:GetService("Workspace").Bmee24z["Right Leg"].CFrame
+
+--//Boss
+repeat wait() until game:GetService("Workspace"):FindFirstChild("Okeania, the Ocean's Authority")
+wait(1)
+repeat wait() until game:GetService("Workspace").Bmee24z:FindFirstChild("Right Leg")
+repeat
+wait(0.1)
+game.Players.LocalPlayer.Character:MoveTo(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
+until game:GetService("Workspace"):FindFirstChild("Okeania, the Ocean's Authority") == nil
+
+--//Tp Stuff
+repeat
+wait(1)
+if v.name == "Azure Orb" then
+v.Parent = game.Players.LocalPlayer.Character
+end
+end
+until game:GetService("Workspace").Bmee24z:FindFirstChild("Azure Orb")
+
+--//Remote for tp
+wait(1)
+local args = {
+	"use",
+	{}
+}
+game:GetService("Players").LocalPlayer.Character:WaitForChild("Azure Orb"):WaitForChild("WeaponRemote"):FireServer(unpack(args))
+wait(0.5)
+local args = {
+	"createParty",
+	{
+		settings = {
+			Visual = true,
+			FriendsOnly = true,
+			TormentMode = true
+		},
+		subplace = "AzureRest"
+	}
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(args))
+wait(0.5)
+local args = {
+	"joinSubplace",
+	{}
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(args))
+end
+end
+end
