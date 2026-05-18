@@ -54,7 +54,7 @@ if game.PlaceId == 112802237735950 then
 
     --//Tp Stuff
     repeat
-        task.wait(0.5)
+        task.wait()
         local item = backpack:FindFirstChild("Azure Orb")
         if item then
             item.Parent = character
