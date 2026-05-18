@@ -1,0 +1,49 @@
+repeat wait() until game:IsLoaded()
+if game.PlaceId == 8811271345 then
+    task.wait(5)
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    --//Teleport
+    player.Character:MoveTo(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
+    
+    --// Equip
+    local backpack = player:WaitForChild("Backpack")
+    local weapon = backpack:WaitForChild("Azure Orb")
+    if weapon then
+        weapon.Parent = character
+    end
+
+    --// Equip Checker Stuff
+    repeat
+        task.wait()
+        local item = backpack:FindFirstChild("Azure Orb")
+        if item then
+            item.Parent = character
+        end
+    until character:FindFirstChild("Azure Orb")
+
+    --// Remote for teleporting out
+    task.wait()
+    local useArgs = { "use", {} }
+    character:WaitForChild("Azure Orb"):WaitForChild("WeaponRemote"):FireServer(unpack(useArgs))
+    
+    task.wait()
+    local partyArgs = {
+        "createParty",
+        {
+            settings = {
+                Visual = true,
+                FriendsOnly = true,
+                TormentMode = true
+            },
+            subplace = "AzureRest"
+        }
+    }
+    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(partyArgs))
+    
+    task.wait()
+    local joinArgs = { "joinSubplace", {} }
+    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(joinArgs))
+end
