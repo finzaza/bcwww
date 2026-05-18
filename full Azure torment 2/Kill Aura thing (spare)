@@ -36,7 +36,7 @@ if game.PlaceId == 112802237735950 then
             end
 
             -- 1. Auto-Equip Logic (Only runs if weapon hasn't been destroyed by Spare Mode)
-            local tool = Character:FindFirstChild("Torrent") or Character:FindFirstChild("Equinox Slicer")
+            local tool = Character:FindFirstChild("Equinox Slicer")
             if not tool then
                 local backpackTool = Player.Backpack:FindFirstChild("Equinox Slicer")
                 if backpackTool then
