@@ -1,0 +1,65 @@
+repeat task.wait() until game:IsLoaded()
+
+if game.PlaceId == 96516249626799 then
+    task.wait(2.5)
+    
+    local Player = game.Players.LocalPlayer
+    repeat wait() until game:GetService("Players").LocalPlayer.Character:FindFirstChild("Equinox Slicer")
+    print("Loaded!")
+    print("Started Kill Aura Thing")
+    getgenv().ALL = true -- Kill switch
+
+    local function attackLoop()
+        while getgenv().ALL do
+            task.wait(0.01) -- High speed but safe
+            
+            local Character = Player.Character
+            if not Character then continue end
+
+            -- 1. Auto-Equip Logic (Handles Equinox Slicer)
+            local tool = Character:FindFirstChild("Equinox Slicer")
+            if not tool then
+                local backpackTool = Player.Backpack:FindFirstChild("Equinox Slicer")
+                if backpackTool then
+                    backpackTool.Parent = Character
+                    tool = backpackTool
+                end
+            end
+
+            -- 2. Attack Logic
+            if tool and tool:FindFirstChild("RemoteFunction") then
+                local Remote = tool.RemoteFunction
+                
+                for _, value in ipairs(workspace:GetDescendants()) do
+                    if not getgenv().ALL then break end
+                    
+                    local humanoid = value:FindFirstChildOfClass("Humanoid")
+                    local rootPart = value:FindFirstChild("HumanoidRootPart")
+                    
+                    -- Only target living enemies that aren't us
+                    if humanoid and rootPart and value ~= Character and humanoid.Health > 0 then
+                            local args = {
+                        "hit",
+                        {
+                         rootPart.Position, -- Targets the enemy's Vector3 coordinates directly
+                         5.949999809265137,
+                         2,
+                         -1
+                        }
+                          }
+                        
+                        -- Using pcall to prevent the script from crashing if you die
+                        pcall(function()
+                            Remote:InvokeServer(unpack(args))
+                        end)
+                    end
+                end
+            end
+        end
+    end
+
+    -- Start 15 concurrent attack threads for maximum speed
+    for i = 1, 15 do
+        coroutine.wrap(attackLoop)()
+    end
+end
