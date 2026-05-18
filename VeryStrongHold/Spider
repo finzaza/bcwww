@@ -1,20 +1,27 @@
 repeat task.wait() until game:IsLoaded()
 
 if game.PlaceId == 96516249626799 then
-    task.wait(5)
+    --// 1. PRIORITIZED THREAT CONFIGURATION CHECK
+    -- The script stops here and waits until a major boss is recognized in workspace
+    repeat task.wait(0.5) until workspace:FindFirstChild("Tsubolasta") 
+        or workspace:FindFirstChild("The Supreme Uber Bringer of Light") 
+        or workspace:FindFirstChild("Gilgamesh, the Consumer of Reality")
+    
+    print("--- BOSS DETECTED: STARTING SCRIPT PIPELINE ---")
+    task.wait(1) -- Short delay to let game assets stabilize
 
     local Player = game.Players.LocalPlayer
     local Character = Player.Character or Player.CharacterAdded:Wait()
     local Backpack = Player:WaitForChild("Backpack")
 
-    --// 1. Initial Weapon Check & Sky Spawn Setup
+    --// 2. Weapon Check & Sky Spawn Setup
     if Backpack:FindFirstChild("Equinox Slicer") then
-        if Character prestige and Character:FindFirstChild("HumanoidRootPart") then
+        if Character and Character:FindFirstChild("HumanoidRootPart") then
             Character:MoveTo(Vector3.new(-950000.23584, 950000.05774, -1651.85693))
         end
         task.wait(0.1)
 
-        -- Dynamically tracks your character instead of hardcoding 'Bmee24z'
+        -- Dynamically track character components safely
         local rightLeg = Character:WaitForChild("Right Leg", 5)
         local rootPart = Character:WaitForChild("HumanoidRootPart", 5)
 
@@ -39,22 +46,19 @@ if game.PlaceId == 96516249626799 then
             Character:MoveTo(Vector3.new(129.942154, -2.86779857, -81.6024017))
         end
 
-        -- Wait until any major threat configuration initializes
-        repeat task.wait(0.5) until workspace:FindFirstChild("Tsubolasta") 
-            or workspace:FindFirstChild("The Supreme Uber Bringer of Light") 
-            or workspace:FindFirstChild("Gilgamesh, the Consumer of Reality")
-
-        -- Auto-Equip your main weapon
+        -- Auto-Equip your main weapon now that combat has started
         local slicer = Backpack:FindFirstChild("Equinox Slicer")
         if slicer then
             slicer.Parent = Character
         end
     end
 
-    --// 2. Monitoring & Waiting for Boss Defeat
+    --// 3. Monitoring & Waiting for Boss Defeat
     repeat task.wait(0.5) until workspace:FindFirstChild("Gilgamesh, the Consumer of Reality") == nil
     repeat task.wait(0.5) until workspace:FindFirstChild("Tsubolasta") == nil
     repeat task.wait(0.5) until workspace:FindFirstChild("The Supreme Uber Bringer of Light") == nil
+
+    print("---SPIDER DEFEAT!---")
 
     -- Auto-Equip Destination Key Item
     repeat
@@ -65,7 +69,7 @@ if game.PlaceId == 96516249626799 then
         end
     until Character:FindFirstChild("Mysterious Artifact")
 
-    --// 3. Matchmaking / Teleport Remote Pipeline Execution
+    --// 4. Matchmaking / Teleport Remote Pipeline Execution
     task.wait(1.5)
     local activeArtifact = Character:WaitForChild("Mysterious Artifact", 5)
     if activeArtifact then
@@ -99,5 +103,5 @@ if game.PlaceId == 96516249626799 then
         game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(joinArgs))
     end)
 
-    print("--SPIDER DEAD--")
+    print("--RELOAD!--")
 end
