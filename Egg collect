@@ -9,11 +9,9 @@ local SETTINGS = {
     Range = 150,
 }
 
--- Type your egg names here in ALL LOWERCASE letters.
+-- You can add more egg here and change it true
 local ALLOWED_EGGS = {
-    ["eggbadlands"] = true,
-    ["eggvolcano"]  = false,
-    ["commonegg"]   = true,
+    ["EggNormal"] = true, -- Try changing this based on console output
 }
 
 local function bringPart(part)
@@ -38,21 +36,20 @@ end
 local function scanForEggs()
     for _, item in ipairs(workspace:GetDescendants()) do
         if item:IsA("MeshPart") and item:FindFirstChild("TouchInterest") then
+            local distance = (item.Position - hrp.Position).Magnitude
             
-            -- Get the lowercase names of the part AND its parent model
-            local partNameLower = string.lower(item.Name)
-            local parentNameLower = item.Parent and string.lower(item.Parent.Name) or ""
-            
-            -- Check if either name matches our allowed list
-            if ALLOWED_EGGS[partNameLower] == true or ALLOWED_EGGS[parentNameLower] == true then
-                local distance = (item.Position - hrp.Position).Magnitude
+            if distance <= SETTINGS.Range then
+                -- THIS WILL PRINT THE EXACT NAMES TO YOUR F9 CONSOLE
+                print("--- EGG DETECTED ---")
+                print("MeshPart Name: '" .. item.Name .. "'")
+                print("Parent Model Name: '" .. (item.Parent and item.Parent.Name or "None") .. "'")
+                print("--------------------")
                 
-                if distance <= SETTINGS.Range then
-                    print("Bringing targeted egg: " .. item.Name)
+                -- Check if either name exactly matches our allowed list
+                if ALLOWED_EGGS[item.Name] == true or (item.Parent and ALLOWED_EGGS[item.Parent.Name] == true) then
                     bringPart(item)
                 end
             end
-            
         end
     end
 end
