@@ -6,6 +6,7 @@ if game.PlaceId == 96516249626799 then
     local Player = game.Players.LocalPlayer
     repeat wait() until game:GetService("Players").LocalPlayer.Character:FindFirstChild("Equinox Slicer")
     print("Loaded!")
+    repeat wait() until game.workspace:FindFirstChild("Verify Done!")
     print("Started Kill Aura Thing")
     getgenv().ALL = true -- Kill switch
 
