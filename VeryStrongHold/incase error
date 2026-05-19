@@ -9,7 +9,6 @@ if game.PlaceId == 96516249626799 or game.PlaceId == 8811271345 then
     local targetWeapon = "Equinox Slicer"
     local artifactName = "Mysterious Artifact"
     local safeZone = Vector3.new(-950000.23584, 950000.05774, -1651.85693)
-    local arenaZone = Vector3.new(129.942154, -2.86779857, -81.6024017)
 
     --// 1. IMMEDIATE WEAPON & SAFETY TELEPORT CHECK
     print("Checking item requirements...")
@@ -25,7 +24,7 @@ if game.PlaceId == 96516249626799 or game.PlaceId == 8811271345 then
 
     print("Weapon verified! Performing instant safe-zone setup...")
     
-    -- Teleport to safety right away to avoid any anticheat or danger at spawn
+    -- Teleport to safety right away
     if Character:FindFirstChild("HumanoidRootPart") then
         Character:MoveTo(safeZone)
     end
@@ -43,15 +42,9 @@ if game.PlaceId == 96516249626799 or game.PlaceId == 8811271345 then
         NewPart.Anchored = true
         NewPart.CFrame = rightLeg.CFrame
         task.wait(0.5)
-
-        -- Bypass Component Cloning
-        local Clone = rootPart:Clone()
-        Clone.Parent = Character
-        task.wait(1)
     end
 
     --// 2. SPAWN CONFIRMATION PART FOR OTHER SCRIPTS
-    -- Creates the "Verify Done!" part so your other scripts can detect it
     local VerifyPart = Instance.new("Part")
     VerifyPart.Parent = workspace
     VerifyPart.Size = Vector3.new(1, 1, 1)
@@ -59,79 +52,61 @@ if game.PlaceId == 96516249626799 or game.PlaceId == 8811271345 then
     VerifyPart.Name = "Verify Done!"
     VerifyPart.Anchored = true
     VerifyPart.CanCollide = false
-    VerifyPart.Transparency = 1 -- Hidden so it doesn't clutter the map visually
+    VerifyPart.Transparency = 1 
     task.wait(0.5)
 
-    --// 3. IDLE IN SAFETY UNTIL THREAT CONFIGURATION DETECTED
-    print("Waiting for threat configuration to initialize while safe...")
-    repeat task.wait(0.5) until workspace:FindFirstChild("Tsubolasta") 
-        or workspace:FindFirstChild("The Supreme Uber Bringer of Light") 
-        or workspace:FindFirstChild("Gilgamesh, the Consumer of Reality")
-    
-    print("--- BOSS DETECTED: IMMERSING INTO COMBAT ---")
-    
-    -- Drop down into the active arena coordinates now that the boss is active
-    if Character:FindFirstChild("HumanoidRootPart") then
-        Character:MoveTo(arenaZone)
+    --// 3. PLACE-SPECIFIC TELEPORT PIPELINE
+    -- The matchmaking network requests will ONLY trigger if you are in this exact place
+    if game.PlaceId == 8811271345 then
+        print("Target PlaceId recognized! Proceeding straight to matchmaking systems...")
+
+        -- Auto-Equip Key Teleport Item
+        repeat
+            task.wait(0.5)
+            local artifact = Backpack:FindFirstChild(artifactName)
+            if artifact then
+                artifact.Parent = Character
+            end
+        until Character:FindFirstChild(artifactName)
+
+        -- Matchmaking Remote Pipeline Execution
+        task.wait(1.5)
+        local activeArtifact = Character:WaitForChild(artifactName, 5)
+        if activeArtifact and activeArtifact:FindFirstChild("WeaponRemote") then
+            local useArgs = { "use", {} }
+            pcall(function()
+                activeArtifact.WeaponRemote:FireServer(unpack(useArgs))
+            end)
+        end
+
+        task.wait(0.5)
+        local partySystemArgs = {
+            "createParty",
+            {
+                settings = {
+                    FriendsOnly = true,
+                    Visual = true
+                },
+                subplace = "Stronghold"
+            }
+        }
+        pcall(function()
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(partySystemArgs))
+        end)
+
+        task.wait(0.5)
+        local joinArgs = { "joinSubplace", {} }
+        pcall(function()
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(joinArgs))
+        end)
+        
+        print("--RELOAD!--")
+    else
+        print("Different PlaceId detected. Safety platform generated, skipping teleport execution.")
     end
-
-    -- Auto-Equip your weapon
-    local slicer = Backpack:FindFirstChild(targetWeapon)
-    if slicer then
-        slicer.Parent = Character
-    end
-
-    --// 4. MONITORING PHASE (Waiting for Boss Defeat)
-    repeat task.wait(0.5) until workspace:FindFirstChild("Gilgamesh, the Consumer of Reality") == nil
-    repeat task.wait(0.5) until workspace:FindFirstChild("Tsubolasta") == nil
-    repeat task.wait(0.5) until workspace:FindFirstChild("The Supreme Uber Bringer of Light") == nil
-
-    print("--- SPIDER DEFEAT! ---")
-
-    -- Clean up the verification part once the match pipeline moves forward
+    
+    -- Clean up the verification part right at the end of execution sequence
     if workspace:FindFirstChild("Verify Done!") then
         workspace:FindFirstChild("Verify Done!"):Destroy()
     end
-
-    -- Auto-Equip Key Teleport Item
-    repeat
-        task.wait(0.5)
-        local artifact = Backpack:FindFirstChild(artifactName)
-        if artifact then
-            artifact.Parent = Character
-        end
-    until Character:FindFirstChild(artifactName)
-
-    --// 5. REMOTE TELEPORTATION SYSTEM MATCHMAKING PIPELINE
-    task.wait(1.5)
-    local activeArtifact = Character:WaitForChild(artifactName, 5)
-    if activeArtifact and activeArtifact:FindFirstChild("WeaponRemote") then
-        local useArgs = { "use", {} }
-        pcall(function()
-            activeArtifact.WeaponRemote:FireServer(unpack(useArgs))
-        end)
-    end
-
-    task.wait(0.5)
-    local partySystemArgs = {
-        "createParty",
-        {
-            settings = {
-                FriendsOnly = true,
-                Visual = true
-            },
-            subplace = "Stronghold"
-        }
-    }
-    pcall(function()
-        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(partySystemArgs))
-    end)
-
-    task.wait(0.5)
-    local joinArgs = { "joinSubplace", {} }
-    pcall(function()
-        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PartySystem"):WaitForChild("PartyFunction"):InvokeServer(unpack(joinArgs))
-    end)
-
-    print("--RELOAD!--")
 end
