@@ -8,6 +8,7 @@ if game.PlaceId == 96516249626799 then
     local Backpack = Player:WaitForChild("Backpack")
     local weaponName = "Equinox Slicer"
 
+    repeat wait() until game.workspace:FindFirstChild("Verify Done!")
     --// 1. Weapon Auto-Equip
     local tool = Character:FindFirstChild(weaponName) or Backpack:FindFirstChild(weaponName)
     if tool then
