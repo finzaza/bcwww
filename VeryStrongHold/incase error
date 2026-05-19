@@ -1,6 +1,6 @@
 repeat task.wait() until game:IsLoaded()
 
-if game.PlaceId == 96516249626799 then
+if game.PlaceId == 96516249626799 or game.PlaceId == 8811271345 then
 
     local Player = game.Players.LocalPlayer
     local Character = Player.Character or Player.CharacterAdded:Wait()
