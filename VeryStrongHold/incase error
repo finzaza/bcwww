@@ -44,7 +44,7 @@ if game.PlaceId == 96516249626799 or game.PlaceId == 8811271345 then
         task.wait(0.5)
     end
 
-    --// 2. SPAWN CONFIRMATION PART FOR OTHER SCRIPTS
+    --// 2. SPAWN CONFIRMATION PART FOR OTHER SCRIPTS (Stays permanently)
     local VerifyPart = Instance.new("Part")
     VerifyPart.Parent = workspace
     VerifyPart.Size = Vector3.new(1, 1, 1)
@@ -56,7 +56,6 @@ if game.PlaceId == 96516249626799 or game.PlaceId == 8811271345 then
     task.wait(0.5)
 
     --// 3. PLACE-SPECIFIC TELEPORT PIPELINE
-    -- The matchmaking network requests will ONLY trigger if you are in this exact place
     if game.PlaceId == 8811271345 then
         print("Target PlaceId recognized! Proceeding straight to matchmaking systems...")
 
@@ -102,11 +101,8 @@ if game.PlaceId == 96516249626799 or game.PlaceId == 8811271345 then
         
         print("--RELOAD!--")
     else
-        print("Different PlaceId detected. Safety platform generated, skipping teleport execution.")
+        print("Different PlaceId detected. Safety platform generated, skipped teleport execution.")
     end
     
-    -- Clean up the verification part right at the end of execution sequence
-    if workspace:FindFirstChild("Verify Done!") then
-        workspace:FindFirstChild("Verify Done!"):Destroy()
-    end
+    -- Clean up block removed. "Verify Done!" stays active in workspace.
 end
