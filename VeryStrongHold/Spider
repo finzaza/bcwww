@@ -2,6 +2,7 @@ repeat task.wait() until game:IsLoaded()
 
 if game.PlaceId == 96516249626799 then
     --// 1. PRIORITIZED THREAT CONFIGURATION CHECK
+    repeat wait() until game.workspace:FindFirstChild("Verify Done!")
     -- The script stops here and waits until a major boss is recognized in workspace
     repeat task.wait(0.5) until workspace:FindFirstChild("Tsubolasta") 
         or workspace:FindFirstChild("The Supreme Uber Bringer of Light") 
