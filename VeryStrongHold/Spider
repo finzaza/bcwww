@@ -5,7 +5,7 @@ if game.PlaceId == 96516249626799 then
     repeat wait() until game.workspace:FindFirstChild("Verify Done!")
     -- The script stops here and waits until a major boss is recognized in workspace
     repeat task.wait(0.5) until workspace:FindFirstChild("Tsubolasta") 
-        or workspace:FindFirstChild("The Supreme Uber Bringer of Light") 
+        or workspace:FindFirstChild("The Supreme Uber Bringer of Light and Spacetime Annihilation") 
         or workspace:FindFirstChild("Gilgamesh, the Consumer of Reality")
     
     print("--- BOSS DETECTED: STARTING SCRIPT PIPELINE ---")
@@ -57,7 +57,7 @@ if game.PlaceId == 96516249626799 then
     --// 3. Monitoring & Waiting for Boss Defeat
     repeat task.wait(0.5) until workspace:FindFirstChild("Gilgamesh, the Consumer of Reality") == nil
     repeat task.wait(0.5) until workspace:FindFirstChild("Tsubolasta") == nil
-    repeat task.wait(0.5) until workspace:FindFirstChild("The Supreme Uber Bringer of Light") == nil
+    repeat task.wait(0.5) until workspace:FindFirstChild("The Supreme Uber Bringer of Light and Spacetime Annihilation") == nil
 
     print("---SPIDER DEFEAT!---")
 
